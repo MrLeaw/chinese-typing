@@ -299,22 +299,15 @@
             </div>
         </div>
 
-        <!-- Text Selection -->
+        <!-- Difficulty Selection -->
         <div class="text-selector">
-            <label for="textSelector">選擇練習文本 (Select Practice Text)</label>
-            <select id="textSelector">
-                <option value="0">日常生活 - 去公園散步</option>
-                <option value="1">學校生活 - 小明的一天</option>
-                <option value="2">餐廳用餐 - 美味的晚餐</option>
-                <option value="3">購物經驗 - 在市場買菜</option>
-                <option value="4">交通出行 - 搭捷運上班</option>
-                <option value="5">量子物理 - 薛丁格方程</option>
-                <option value="6">生物學 - 細胞膜結構</option>
-                <option value="7">文學哲學 - 莊子的齊物論</option>
-                <option value="8">高等數學 - 微分幾何</option>
-                <option value="9">相對論 - 廣義相對論</option>
-                <option value="10">中醫理論 - 陰陽五行</option>
-                <option value="11">地質學 - 地殼板塊運動</option>
+            <label for="difficultySelector">選擇難度等級 (Select Difficulty Level)</label>
+            <select id="difficultySelector">
+                <option value="0">初級 (Beginner)</option>
+                <option value="1">中級 (Intermediate)</option>
+                <option value="2">高級 (Advanced)</option>
+                <option value="3">專家級 (Expert)</option>
+                <option value="4">母語/學術級 (Native/Academic)</option>
             </select>
         </div>
 
@@ -355,37 +348,41 @@
     </div>
 
     <script>
-        // Sample texts for practice
-        const practiceTexts = [
-            "今天天氣很好，我想去公園散步。看到很多人在那裡運動和聊天。孩子們在遊樂場玩耍，老人們在涼亭下棋。這樣的午後時光真是令人愉快。",
-            "小明每天早上七點起床，先刷牙洗臉，然後吃早餐去上學。在學校裡，他認真聽課，和同學們一起討論問題。放學後，他會到圖書館讀書，晚上回家幫忙做家事。",
-            "這家餐廳的菜很好吃，服務也很親切，所以常常客滿。我們點了糖醋排骨、宮保雞丁和麻婆豆腐。每一道菜都色香味俱全，讓人食指大動。最後還點了一碗熱騰騰的湯。",
-            "媽媽帶我去傳統市場買菜。市場裡有各式各樣的蔬菜水果，還有新鮮的魚肉。攤販們熱情地招呼客人，討價還價的聲音此起彼落。我們買了青菜、蘿蔔和雞肉，準備回家煮晚餐。",
-            "每天上班我都搭捷運，因為既方便又環保。在捷運站裡，人來人往很熱鬧。車廂裡有人看書，有人聽音樂，有人滑手機。雖然有時候會很擁擠，但這就是都市生活的一部分。",
-
-// Quantum Physics Text
-"量子力學中的薛丁格方程描述了微觀粒子的波函數演化。不確定性原理表明，粒子的位置和動量無法同時精確測定。量子糾纏現象揭示了微觀世界中粒子間的非局域性關聯，這種現象在量子計算和量子通訊領域具有重要應用價值。",
-
-// Advanced Biology Text
-"細胞膜的脂質雙分子層結構維持細胞內外環境的穩態。膜蛋白負責物質轉運、信號傳導和酶催化等功能。內質網和高爾基體參與蛋白質的合成、修飾和轉運過程。粒線體作為細胞的能量工廠，透過氧化磷酸化產生三磷酸腺苷。",
-
-// Classical Literature/Philosophy
-"莊子的齊物論闡述了萬物齊同的哲學思想，認為事物之間的差異源於人為的分別心。他提出「物無非彼，物無非是」的觀點，強調相對性和絕對性的統一。逍遙遊篇描繪了超越世俗束縛的精神境界，體現了道家追求自由無為的人生理想。",
-
-// Advanced Mathematics
-"微分幾何研究曲線和曲面的局部性質，利用微積分方法分析幾何對象。黎曼幾何推廣了歐幾里得幾何，引入曲率概念描述空間的彎曲程度。拓撲學關注空間的連續性變形，不變量理論為幾何和代數提供了深刻的聯繫。",
-
-// Advanced Physics - Relativity
-"廣義相對論將重力描述為時空曲率的體現，質量和能量使時空發生彎曲。黑洞是時空曲率極端的區域，其視界內部的資訊無法傳遞到外界。重力波是時空曲率的漣漪，由加速運動的質量產生，近年來被雷射干涉儀成功探測。",
-
-// Traditional Chinese Medicine
-"中醫理論以陰陽五行為基礎，認為人體是一個統一的有機整體。氣血津液是維持生命活動的基本物質，經絡系統負責氣血的運行和調節。辨證論治是中醫診療的核心方法，根據證候的寒熱虛實進行個體化治療。",
-
-// Geology/Earth Sciences
-"地殼板塊運動造成地震、火山爆發等地質現象。岩漿冷卻形成火成岩，沉積作用產生沉積岩，變質作用形成變質岩。地質年代學利用放射性同位素衰變測定岩石年齡，為地球演化史提供時間標尺。"
+        // Practice texts organized by difficulty
+        const practiceTextsByDifficulty = [
+            // Level 0: Beginner
+            [
+                "大家好，我叫李明。我來自美國，現在住在臺北。我是一名英文老師。我的學校很大，學生都很可愛。我喜歡臺灣，因為臺灣人很友善，食物也很好吃。我最喜歡吃牛肉麵和珍珠奶茶。我正在學中文，我覺得中文有一點難，特別是寫字。我的愛好是看電影和聽音樂。很高興認識你們。",
+                "我每天早上七點起床。起床以後，我先喝一杯水，然後做早餐。我通常吃麵包和雞蛋。八點半，我坐捷運去公司上班。我的工作很有意思。中午我和同事一起吃午飯。我們常常去公司附近的餐廳。下午五點我下班回家。晚上我喜歡在家看書或是跟朋友聊天。我大概十一點睡覺。",
+                "老闆，你好。請問這個西瓜多少錢一斤？看起來很甜。好的，那我要買一個。另外，我還想買一些蘋果和香蕉。蘋果要五個，香蕉要一串。這裡的水果都很新鮮。對了，現在是芒果的季節嗎？如果是的話，我也想買兩個。謝謝你。總共多少錢？這是一千塊，請找錢。"
+            ],
+            // Level 1: Intermediate
+            [
+                "這個週末我打算和幾個朋友去陽明山走走。我們聽說最近天氣不錯，山上的風景應該會很漂亮。我們計畫早上搭公車上山，先去擎天崗看牛，然後沿著步道散步，享受大自然。中午我們會自己帶些簡單的三明治當午餐。因為我對攝影很有興趣，所以一定會帶相機去，希望能拍到一些滿意的照片。如果下山後還有時間，我們或許會去士林夜市逛逛，吃點道地的小吃。",
+                "隨著工業發展，環境污染的問題變得越來越嚴重。無論是空氣污染、水污染，還是塑膠廢棄物，都對我們的地球造成了巨大的負擔。因此，實行環保生活是我們每個人的責任。我們可以從身邊的小事做起，例如隨手關燈、節約用水、做好垃圾分類，並且多使用環保袋，減少一次性塑膠製品。雖然個人的力量有限，但只要大家一起努力，就能為保護地球貢獻一份心力。",
+                "我上週去看了一部廣受好評的懸疑電影。故事的結構非常巧妙，從一開始就營造出緊張的氣氛，讓觀眾完全投入其中。導演運用了許多非線性的敘事手法，不斷地在過去和現在之間切換，使得劇情更加撲朔迷離。演員的表現也相當出色，尤其主角把內心的掙扎與恐懼詮釋得淋漓盡致。電影的結局更是出人意料，顛覆了所有之前的猜測。總而言之，這是一部值得推薦的佳作。"
+            ],
+            // Level 2: Advanced
+            [
+                "現代都市猶如一頭永不歇息的巨獸，白日裡車水馬龍，夜晚則霓虹璀璨。人們在這片鋼筋水泥的叢林中奔波，為生活、為理想而奮鬥。然而，喧囂背後，這座城市亦有其靜謐的角落。或許是清晨公園裡打太極拳的長者，或許是隱身巷弄的獨立書店，又或許是黃昏時分，夕陽餘暉灑滿的河濱。在這些時刻，城市的節奏彷彿慢了下來，讓人得以喘息，重新審視內心，尋回那份久違的平靜與歸屬感。",
+                "沉浸於書海之中，無異於進行一場跨越時空的深度對話。文字作為思想的載體，能引領我們窺探先哲的智慧，體悟不同時代的文化脈動。一本好書，或能啟迪心智，或能撫慰靈魂。當我們與書中人物共歷悲歡，隨作者的思緒遊走於奇妙的境地，世俗的煩惱似乎也隨之消散。這種純粹的精神享受，是其他娛樂方式難以比擬的。故曰，讀書之樂，樂在心領神會，樂在自我昇華。",
+                "人工智能的崛起，正以前所未有的深度與廣度，重塑著人類社會的樣貌。從自動駕駛到醫療診斷，其應用已滲透至各行各業，極大提升了生產效率。然而，這項顛覆性的技術也帶來了諸多挑戰，例如大規模的失業風險、演算法的偏見問題，以及數據隱私與倫理的困境。我們正站在一個關鍵的十字路口，如何善用AI的潛力，同時建立健全的規範以防範其弊端，將是全人類刻不容緩的共同課題。"
+            ],
+            // Level 3: Expert
+            [
+                "秋氣蕭瑟，獨自彳亍於寂寥古道，看落葉蹣跚，隨風飄零。天穹高遠而湛藍，宛若一泓不起漣漪的清潭。遠山含黛，近水無言，萬物皆在凋敝中顯露其本真面目。此情此景，易引人愁思，然細品之下，未嘗不是一種侘傺之美。生命由絢爛歸於平淡，恰如這季節的更迭，蘊含著一種循環往復的哲理。人生在世，何嘗不似這秋葉，終將齎志而歿，歸於塵土？",
+                "藝術之真諦，非在於纖毫畢現之摹寫，亦非純粹情感之宣洩，而在於捕捉那稍縱即逝之神韻與靈光。高明之藝術家，能以其獨特之慧眼，於平凡事物中洞見不凡，於剎那間凝住永恆。其作品或如晨鐘暮鼓，發人深省；或如空谷幽蘭，沁人心脾。觀者與作品交感之際，心靈得以滌蕩，境界得以提升。此種超越言筌的共鳴，正是藝術所以為藝術之精髓所在。",
+                "探究歷史長河，常令人陷入偶然與必然的思辨。王朝之興替，英雄之崛起，看似皆有其必然的社會經濟背景與文化基因。然於關鍵節點，一場突如其來的瘟疫、一次偶然的軍事決策，或某位人物的性格缺陷，卻又可能如蝴蝶效應般，徹底扭轉歷史的軌跡。歷史彷彿在宏大的必然規律框架下，為無數微小的偶然性留下了恣意舞蹈的空間，其複雜與魅力，正在於此。"
+            ],
+            // Level 4: Native/Academic
+            [
+                "古籍之校勘，乃考據學之肯綮。一部典籍，歷經傳抄刊刻，訛誤增刪在所難免。校勘者之責，在於窮盡版本，比勘異同，溯其源流，以還其廬山真面目。此間功夫，非僅為辨識魯魚亥豕之誤，更需洞察時代之筆諱、書手之譌體，乃至後人之臆補。或有古字湮沒，為蠹魚所噬，僅存闕文，此時則需憑藉上下文與聲韻訓詁之學，審慎推求。此道甚艱，然為往聖繼絕學，雖千萬人吾往矣。",
+                "商周青銅器之饕餮紋，其形詭譎，其意古奧，向為學界聚訟之焦點。其紋飾由簡至繁，由抽象至具象，演變軌跡清晰可辨。早期多為簡化之獸面，至商晚期則臻於繁縟，雙目圓睜，巨口獠牙，有吞噬天地之勢。究其意涵，或以為乃上古圖騰之孑遺，或以為象徵溝通天地之巫覡神獸。結合甲骨卜辭與祭祀禮制考之，饕餮或為一警示性符號，既代表對神明之敬畏，亦用以威嚇魑魅魍魎，以蠡測先民宇宙觀之一斑。",
+                "《莊子·齊物論》乃道家思想之瓌寶。其核心要旨，在於破除人為的是非、彼此、大小之別，達至物我兩忘之境界。「天地與我並生，而萬物與我為一」，此非泯滅差異，而是超越對立的二元思維。當代社會，紛爭不斷，根源常在於固執己見，以自我為中心。莊子之智慧，恰可作一劑清涼散。若能從「道」之高度俯瞰，則一切價值判斷皆具相對性。體悟此理，方能放下執念，以逍遙之心，游刃於紛繁塵世。"
+            ]
         ];
 
-        let currentTextIndex = 0;
+        let currentText = '';
         let isTyping = false;
         let startTime = null;
         let currentPosition = 0;
@@ -398,7 +395,7 @@
         const userInput = document.getElementById('userInput');
         const startBtn = document.getElementById('startBtn');
         const resetBtn = document.getElementById('resetBtn');
-        const textSelector = document.getElementById('textSelector');
+        const difficultySelector = document.getElementById('difficultySelector');
         const wpmDisplay = document.getElementById('wpm');
         const accuracyDisplay = document.getElementById('accuracy');
         const timeDisplay = document.getElementById('time');
@@ -407,29 +404,32 @@
         // Initialize
         function init() {
             loadText();
-            textSelector.addEventListener('change', loadText);
+            difficultySelector.addEventListener('change', loadText);
             startBtn.addEventListener('click', startTyping);
             resetBtn.addEventListener('click', resetTyping);
             userInput.addEventListener('input', handleInput);
         }
 
-        // Load selected text
+        // Load a random text based on selected difficulty
         function loadText() {
-            currentTextIndex = parseInt(textSelector.value);
-            const text = practiceTexts[currentTextIndex];
-            displayText(text);
+            const difficultyIndex = parseInt(difficultySelector.value);
+            const textsForLevel = practiceTextsByDifficulty[difficultyIndex];
+            const randomIndex = Math.floor(Math.random() * textsForLevel.length);
+            currentText = textsForLevel[randomIndex];
+            
+            displayText(currentText);
             resetTyping();
         }
 
         // Display text with character spans
         function displayText(text) {
             textDisplay.innerHTML = '';
-            for (let i = 0; i < text.length; i++) {
+            text.split('').forEach((char, index) => {
                 const span = document.createElement('span');
-                span.textContent = text[i];
-                span.id = `char-${i}`;
+                span.textContent = char;
+                span.id = `char-${index}`;
                 textDisplay.appendChild(span);
-            }
+            });
         }
 
         // Start typing session
@@ -447,10 +447,8 @@
             startBtn.disabled = true;
             startBtn.textContent = '練習中... (Typing...)';
             
-            // Highlight first character
             updateCurrentCharacter();
             
-            // Start timer
             timer = setInterval(updateStats, 100);
         }
 
@@ -468,19 +466,16 @@
             startBtn.disabled = false;
             startBtn.textContent = '開始練習 (Start)';
             
-            // Reset all character styles
             const chars = textDisplay.querySelectorAll('span');
             chars.forEach(char => {
                 char.className = '';
             });
             
-            // Clear timer
             if (timer) {
                 clearInterval(timer);
                 timer = null;
             }
             
-            // Reset stats
             wpmDisplay.textContent = '0';
             accuracyDisplay.textContent = '100%';
             timeDisplay.textContent = '0:00';
@@ -492,35 +487,31 @@
             if (!isTyping) return;
             
             const userText = userInput.value;
-            const targetText = practiceTexts[currentTextIndex];
-            
-            // Filter out intermediate Zhuyin characters - only count Chinese characters
+            const targetText = currentText;
             const chineseText = userText.replace(/[ㄅ-ㄩˊˇˋ˙]/g, '');
             
             totalChars = chineseText.length;
             correctChars = 0;
             
-            // Check each character
-            for (let i = 0; i < Math.max(chineseText.length, currentPosition); i++) {
+            targetText.split('').forEach((targetChar, i) => {
                 const charElement = document.getElementById(`char-${i}`);
-                if (!charElement) continue;
-                
+                if (!charElement) return;
+
                 if (i < chineseText.length) {
-                    if (chineseText[i] === targetText[i]) {
+                    if (chineseText[i] === targetChar) {
                         charElement.className = 'char-correct';
                         correctChars++;
                     } else {
                         charElement.className = 'char-incorrect';
                     }
                 } else {
-                    charElement.className = '';
+                    charElement.className = ''; // Not yet typed
                 }
-            }
+            });
             
-            currentPosition = Math.max(chineseText.length, currentPosition);
+            currentPosition = chineseText.length;
             updateCurrentCharacter();
             
-            // Check if completed
             if (chineseText === targetText) {
                 updateStats();
                 completeTyping();
@@ -531,14 +522,14 @@
         function updateCurrentCharacter() {
             const chars = textDisplay.querySelectorAll('span');
             chars.forEach((char, index) => {
-                if (index === currentPosition && isTyping) {
-                    if (!char.classList.contains('char-correct') && !char.classList.contains('char-incorrect')) {
-                        char.classList.add('char-current');
-                    }
-                } else {
-                    char.classList.remove('char-current');
-                }
+                char.classList.remove('char-current');
             });
+            if (isTyping && currentPosition < targetText.length) {
+                const charElement = document.getElementById(`char-${currentPosition}`);
+                 if (charElement) {
+                    charElement.classList.add('char-current');
+                 }
+            }
         }
 
         // Complete typing session
@@ -553,13 +544,11 @@
                 timer = null;
             }
             
-            // Remove current character highlight
-            const chars = textDisplay.querySelectorAll('span');
-            chars.forEach(char => {
-                char.classList.remove('char-current');
-            });
+            const charElement = document.getElementById(`char-${currentPosition}`);
+            if (charElement) {
+                charElement.classList.remove('char-current');
+            }
             
-            // Show completion message
             setTimeout(() => {
                 alert('恭喜完成！(Congratulations! You completed the text!)');
             }, 500);
@@ -569,20 +558,13 @@
         function updateStats() {
             if (!isTyping || !startTime) return;
             
-            const elapsedTime = (Date.now() - startTime) / 1000; // in seconds
+            const elapsedTime = (Date.now() - startTime) / 1000;
             const minutes = elapsedTime / 60;
             
-            // Calculate CPM (Characters Per Minute)
             const cpm = minutes > 0 ? Math.round(correctChars / minutes) : 0;
-            
-            // Calculate accuracy
             const accuracy = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 100;
+            const progress = Math.round((currentPosition / currentText.length) * 100);
             
-            // Calculate progress
-            const targetLength = practiceTexts[currentTextIndex].length;
-            const progress = Math.round((currentPosition / targetLength) * 100);
-            
-            // Update display
             wpmDisplay.textContent = cpm;
             accuracyDisplay.textContent = `${accuracy}%`;
             timeDisplay.textContent = formatTime(elapsedTime);
@@ -596,7 +578,6 @@
             return `${mins}:${secs.toString().padStart(2, '0')}`;
         }
 
-        // Initialize the app
         init();
     </script>
 </body>

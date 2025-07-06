@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chinese Zhuyin Typing Trainer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 'PingFang TC', 'Hiragino Sans GB', sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-unit {
+            font-size: 0.8em;
+            color: #999;
+        }
+
+        .stat-value.speed { color: #3b82f6; }
+        .stat-value.accuracy { color: #10b981; }
+        .stat-value.time { color: #8b5cf6; }
+        .stat-value.progress { color: #f59e0b; }
+
+        .text-selector {
+            margin-bottom: 30px;
+        }
+
+        .text-selector label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .text-selector select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            background: white;
+        }
+
+        .text-selector select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .text-display {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            line-height: 2.5;
+            font-size: 1.4em;
+            letter-spacing: 0.1em;
+        }
+
+        .char-correct {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .char-incorrect {
+            background-color: #fef2f2;
+            color: #dc2626;
+        }
+
+        .char-current {
+            background-color: #dbeafe;
+            border-bottom: 3px solid #3b82f6;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        .input-area {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .input-area label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .input-area textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.2em;
+            resize: none;
+            font-family: 'Microsoft JhengHei', 'PingFang TC', 'Hiragino Sans GB', sans-serif;
+            line-height: 1.6;
+        }
+
+        .input-area textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .input-area textarea:disabled {
+            background-color: #f9fafb;
+            cursor: not-allowed;
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #2563eb;
+        }
+
+        .btn-secondary {
+            background-color: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #4b5563;
+        }
+
+        .instructions {
+            background: #eff6ff;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .instructions h3 {
+            color: #1e40af;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .instructions ul {
+            color: #1e40af;
+            list-style: none;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .instructions li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .text-display {
+                font-size: 1.2em;
+                padding: 20px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>中文注音打字練習</h1>
+            <p>Chinese Zhuyin Typing Trainer</p>
+        </div>
+
+        <!-- Stats Panel -->
+        <div class="stats-panel">
+            <div class="stat-card">
+                <div class="stat-label">Speed</div>
+                <div class="stat-value speed" id="wpm">0</div>
+                <div class="stat-unit">CPM</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Accuracy</div>
+                <div class="stat-value accuracy" id="accuracy">100%</div>
+                <div class="stat-unit">Correct</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Time</div>
+                <div class="stat-value time" id="time">0:00</div>
+                <div class="stat-unit">Elapsed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Progress</div>
+                <div class="stat-value progress" id="progress">0%</div>
+                <div class="stat-unit">Complete</div>
+            </div>
+        </div>
+
+        <!-- Text Selection -->
+        <div class="text-selector">
+            <label for="textSelector">選擇練習文本 (Select Practice Text)</label>
+            <select id="textSelector">
+                <option value="0">日常生活 - 去公園散步</option>
+                <option value="1">學校生活 - 小明的一天</option>
+                <option value="2">餐廳用餐 - 美味的晚餐</option>
+                <option value="3">購物經驗 - 在市場買菜</option>
+                <option value="4">交通出行 - 搭捷運上班</option>
+                <option value="5">量子物理 - 薛丁格方程</option>
+                <option value="6">生物學 - 細胞膜結構</option>
+                <option value="7">文學哲學 - 莊子的齊物論</option>
+                <option value="8">高等數學 - 微分幾何</option>
+                <option value="9">相對論 - 廣義相對論</option>
+                <option value="10">中醫理論 - 陰陽五行</option>
+                <option value="11">地質學 - 地殼板塊運動</option>
+            </select>
+        </div>
+
+        <!-- Text Display -->
+        <div class="text-display" id="textDisplay"></div>
+
+        <!-- Input Area -->
+        <div class="input-area">
+            <label for="userInput">請使用注音輸入法輸入 (Type using Zhuyin IME)</label>
+            <textarea 
+                id="userInput" 
+                rows="4" 
+                placeholder="在這裡輸入中文字符..."
+                disabled
+            ></textarea>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="controls">
+            <button id="startBtn" class="btn btn-primary">
+                開始練習 (Start)
+            </button>
+            <button id="resetBtn" class="btn btn-secondary">
+                重新開始 (Reset)
+            </button>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions">
+            <h3>使用說明 (Instructions)</h3>
+            <ul>
+                <li>請確保您的系統已啟用注音輸入法</li>
+                <li>看著上方的中文文本，使用注音輸入法在下方文本框中輸入</li>
+                <li>系統會自動計算您的打字速度和準確率</li>
+                <li>完成後可以選擇其他文本繼續練習</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Sample texts for practice
+        const practiceTexts = [
+            "今天天氣很好，我想去公園散步。看到很多人在那裡運動和聊天。孩子們在遊樂場玩耍，老人們在涼亭下棋。這樣的午後時光真是令人愉快。",
+            "小明每天早上七點起床，先刷牙洗臉，然後吃早餐去上學。在學校裡，他認真聽課，和同學們一起討論問題。放學後，他會到圖書館讀書，晚上回家幫忙做家事。",
+            "這家餐廳的菜很好吃，服務也很親切，所以常常客滿。我們點了糖醋排骨、宮保雞丁和麻婆豆腐。每一道菜都色香味俱全，讓人食指大動。最後還點了一碗熱騰騰的湯。",
+            "媽媽帶我去傳統市場買菜。市場裡有各式各樣的蔬菜水果，還有新鮮的魚肉。攤販們熱情地招呼客人，討價還價的聲音此起彼落。我們買了青菜、蘿蔔和雞肉，準備回家煮晚餐。",
+            "每天上班我都搭捷運，因為既方便又環保。在捷運站裡，人來人往很熱鬧。車廂裡有人看書，有人聽音樂，有人滑手機。雖然有時候會很擁擠，但這就是都市生活的一部分。",
+
+// Quantum Physics Text
+"量子力學中的薛丁格方程描述了微觀粒子的波函數演化。不確定性原理表明，粒子的位置和動量無法同時精確測定。量子糾纏現象揭示了微觀世界中粒子間的非局域性關聯，這種現象在量子計算和量子通訊領域具有重要應用價值。",
+
+// Advanced Biology Text
+"細胞膜的脂質雙分子層結構維持細胞內外環境的穩態。膜蛋白負責物質轉運、信號傳導和酶催化等功能。內質網和高爾基體參與蛋白質的合成、修飾和轉運過程。粒線體作為細胞的能量工廠，透過氧化磷酸化產生三磷酸腺苷。",
+
+// Classical Literature/Philosophy
+"莊子的齊物論闡述了萬物齊同的哲學思想，認為事物之間的差異源於人為的分別心。他提出「物無非彼，物無非是」的觀點，強調相對性和絕對性的統一。逍遙遊篇描繪了超越世俗束縛的精神境界，體現了道家追求自由無為的人生理想。",
+
+// Advanced Mathematics
+"微分幾何研究曲線和曲面的局部性質，利用微積分方法分析幾何對象。黎曼幾何推廣了歐幾里得幾何，引入曲率概念描述空間的彎曲程度。拓撲學關注空間的連續性變形，不變量理論為幾何和代數提供了深刻的聯繫。",
+
+// Advanced Physics - Relativity
+"廣義相對論將重力描述為時空曲率的體現，質量和能量使時空發生彎曲。黑洞是時空曲率極端的區域，其視界內部的資訊無法傳遞到外界。重力波是時空曲率的漣漪，由加速運動的質量產生，近年來被雷射干涉儀成功探測。",
+
+// Traditional Chinese Medicine
+"中醫理論以陰陽五行為基礎，認為人體是一個統一的有機整體。氣血津液是維持生命活動的基本物質，經絡系統負責氣血的運行和調節。辨證論治是中醫診療的核心方法，根據證候的寒熱虛實進行個體化治療。",
+
+// Geology/Earth Sciences
+"地殼板塊運動造成地震、火山爆發等地質現象。岩漿冷卻形成火成岩，沉積作用產生沉積岩，變質作用形成變質岩。地質年代學利用放射性同位素衰變測定岩石年齡，為地球演化史提供時間標尺。"
+        ];
+
+        let currentTextIndex = 0;
+        let isTyping = false;
+        let startTime = null;
+        let currentPosition = 0;
+        let correctChars = 0;
+        let totalChars = 0;
+        let timer = null;
+
+        // DOM elements
+        const textDisplay = document.getElementById('textDisplay');
+        const userInput = document.getElementById('userInput');
+        const startBtn = document.getElementById('startBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const textSelector = document.getElementById('textSelector');
+        const wpmDisplay = document.getElementById('wpm');
+        const accuracyDisplay = document.getElementById('accuracy');
+        const timeDisplay = document.getElementById('time');
+        const progressDisplay = document.getElementById('progress');
+
+        // Initialize
+        function init() {
+            loadText();
+            textSelector.addEventListener('change', loadText);
+            startBtn.addEventListener('click', startTyping);
+            resetBtn.addEventListener('click', resetTyping);
+            userInput.addEventListener('input', handleInput);
+        }
+
+        // Load selected text
+        function loadText() {
+            currentTextIndex = parseInt(textSelector.value);
+            const text = practiceTexts[currentTextIndex];
+            displayText(text);
+            resetTyping();
+        }
+
+        // Display text with character spans
+        function displayText(text) {
+            textDisplay.innerHTML = '';
+            for (let i = 0; i < text.length; i++) {
+                const span = document.createElement('span');
+                span.textContent = text[i];
+                span.id = `char-${i}`;
+                textDisplay.appendChild(span);
+            }
+        }
+
+        // Start typing session
+        function startTyping() {
+            isTyping = true;
+            startTime = Date.now();
+            currentPosition = 0;
+            correctChars = 0;
+            totalChars = 0;
+            
+            userInput.disabled = false;
+            userInput.focus();
+            userInput.value = '';
+            
+            startBtn.disabled = true;
+            startBtn.textContent = '練習中... (Typing...)';
+            
+            // Highlight first character
+            updateCurrentCharacter();
+            
+            // Start timer
+            timer = setInterval(updateStats, 100);
+        }
+
+        // Reset typing session
+        function resetTyping() {
+            isTyping = false;
+            startTime = null;
+            currentPosition = 0;
+            correctChars = 0;
+            totalChars = 0;
+            
+            userInput.disabled = true;
+            userInput.value = '';
+            
+            startBtn.disabled = false;
+            startBtn.textContent = '開始練習 (Start)';
+            
+            // Reset all character styles
+            const chars = textDisplay.querySelectorAll('span');
+            chars.forEach(char => {
+                char.className = '';
+            });
+            
+            // Clear timer
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+            }
+            
+            // Reset stats
+            wpmDisplay.textContent = '0';
+            accuracyDisplay.textContent = '100%';
+            timeDisplay.textContent = '0:00';
+            progressDisplay.textContent = '0%';
+        }
+
+        // Handle user input
+        function handleInput() {
+            if (!isTyping) return;
+            
+            const userText = userInput.value;
+            const targetText = practiceTexts[currentTextIndex];
+            
+            // Filter out intermediate Zhuyin characters - only count Chinese characters
+            const chineseText = userText.replace(/[ㄅ-ㄩˊˇˋ˙]/g, '');
+            
+            totalChars = chineseText.length;
+            correctChars = 0;
+            
+            // Check each character
+            for (let i = 0; i < Math.max(chineseText.length, currentPosition); i++) {
+                const charElement = document.getElementById(`char-${i}`);
+                if (!charElement) continue;
+                
+                if (i < chineseText.length) {
+                    if (chineseText[i] === targetText[i]) {
+                        charElement.className = 'char-correct';
+                        correctChars++;
+                    } else {
+                        charElement.className = 'char-incorrect';
+                    }
+                } else {
+                    charElement.className = '';
+                }
+            }
+            
+            currentPosition = Math.max(chineseText.length, currentPosition);
+            updateCurrentCharacter();
+            
+            // Check if completed
+            if (chineseText === targetText) {
+                completeTyping();
+            }
+        }
+
+        // Update current character highlight
+        function updateCurrentCharacter() {
+            const chars = textDisplay.querySelectorAll('span');
+            chars.forEach((char, index) => {
+                if (index === currentPosition && isTyping) {
+                    if (!char.classList.contains('char-correct') && !char.classList.contains('char-incorrect')) {
+                        char.classList.add('char-current');
+                    }
+                } else {
+                    char.classList.remove('char-current');
+                }
+            });
+        }
+
+        // Complete typing session
+        function completeTyping() {
+            isTyping = false;
+            startBtn.disabled = false;
+            startBtn.textContent = '開始練習 (Start)';
+            userInput.disabled = true;
+            
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+            }
+            
+            // Remove current character highlight
+            const chars = textDisplay.querySelectorAll('span');
+            chars.forEach(char => {
+                char.classList.remove('char-current');
+            });
+            
+            // Show completion message
+            setTimeout(() => {
+                alert('恭喜完成！(Congratulations! You completed the text!)');
+            }, 500);
+        }
+
+        // Update statistics
+        function updateStats() {
+            if (!isTyping || !startTime) return;
+            
+            const elapsedTime = (Date.now() - startTime) / 1000; // in seconds
+            const minutes = elapsedTime / 60;
+            
+            // Calculate CPM (Characters Per Minute)
+            const cpm = minutes > 0 ? Math.round(correctChars / minutes) : 0;
+            
+            // Calculate accuracy
+            const accuracy = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 100;
+            
+            // Calculate progress
+            const targetLength = practiceTexts[currentTextIndex].length;
+            const progress = Math.round((currentPosition / targetLength) * 100);
+            
+            // Update display
+            wpmDisplay.textContent = cpm;
+            accuracyDisplay.textContent = `${accuracy}%`;
+            timeDisplay.textContent = formatTime(elapsedTime);
+            progressDisplay.textContent = `${progress}%`;
+        }
+
+        // Format time display
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
